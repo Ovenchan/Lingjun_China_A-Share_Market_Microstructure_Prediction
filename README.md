@@ -20,6 +20,85 @@ Modern quantitative finance has moved beyond simple OHLC charts. Today, the "edg
 
 We have provided several hundred days of historical data for a diverse universe of 500 stocks. The features are engineered into minute bars, capturing market microstructure dynamics from various perspectives within the minute, allowing sequential models to presumably have an edge in this competition. The targets are longer than a minute and strictly intraday - we do not ask you to predict overnight gaps.
 
+train.parquet:
+stockid: 0-499, dateid: 0-359, timeid: 0-238, f0-f383, LabelA is target
+{'stockid': [0, 0, 0, 0, 0],
+ 'dateid': [0, 0, 0, 0, 0],
+ 'timeid': [0, 1, 2, 3, 4],
+ 'exchangeid': [0, 0, 0, 0, 0],
+ 'f0': [0.0,
+  0.1701408177614212,
+  0.0977163016796112,
+  0.09508412331342697,
+  0.08755901455879211],
+ 'f1': [0.8276021480560303,
+  1.5028387308120728,
+  2.475088119506836,
+  1.8099485635757446,
+  1.8630694150924683],
+ 'f2': [nan,
+  1.0367116928100586,
+  1.3906992673873901,
+  0.501453697681427,
+  1.0773588418960571],
+ 'f3': [nan,
+  -0.2709181606769562,
+  0.18470048904418945,
+  0.023560311645269394,
+  0.2590816020965576],
+ 'f4': [8.091544347221613e-39,
+  0.1618461310863495,
+  0.13262063264846802,
+  0.1553269773721695,
+  0.29446569085121155],
+...
+ 'LabelA': [-0.02396014705300331,
+  -0.01811475306749344,
+  -0.008410797454416752,
+  -0.011145544238388538,
+  -0.012443514540791512],
+ 'LabelB': [-0.03326994925737381,
+  -0.024314910173416138,
+  -0.010967634618282318,
+  -0.016765035688877106,
+  -0.015333488583564758],
+ 'LabelC': [-0.028307124972343445,
+  -0.021935824304819107,
+  -0.018478985875844955,
+  -0.02259679138660431,
+  -0.01990014873445034]}
+
+test.parquet:
+
+{'stockid': [0, 0, 0, 0, 0],
+ 'dateid': [0, 0, 0, 0, 0],
+ 'timeid': [0, 1, 2, 3, 4],
+ 'exchangeid': [0, 0, 0, 0, 0],
+ 'f0': [nan,
+  0.14547176659107208,
+  0.12428752332925797,
+  0.04504920542240143,
+  0.06788093596696854],
+ 'f1': [nan, 1.0684348344802856, 0.966545045375824, 0.0, 0.0],
+ 'f2': [nan, 1.118942379951477, 0.928851306438446, nan, nan],
+ 'f3': [nan, -1.185532569885254, 1.1293635368347168, nan, nan],
+ 'f4': [0.0,
+  0.5408017039299011,
+  0.6422995924949646,
+  3.097761691606138e-08,
+  2.8250492725306355e-35],
+ 'f5': [0.005750067066401243,
+  0.4395080506801605,
+  0.4095383584499359,
+  0.0,
+  0.40476223826408386],
+...
+ 'f383': [nan,
+  0.6404368877410889,
+  0.1271507292985916,
+  -0.12024550139904022,
+  0.16935458779335022]}
+
 ### The Challenge: Intraday Multi-Horizon Forecasting
 
 The primary objective is to predict a specific target return. To assist in the regularization of your models, we have provided auxiliary labels representing different time horizons. Your goal is to develop a robust algorithm that can:
