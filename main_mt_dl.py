@@ -1,5 +1,5 @@
 from models_dl import *
-from Dataset_mt_dl import *
+from Dataset_mt_dl_V2 import *
 import os
 
 
@@ -23,9 +23,9 @@ if __name__ == '__main__':
     NUM_LAYERS = 1    # 减少层数
     WINDOW_SIZE = 10
     PATCH_SIZE = 2
-    EMBED_DIM = 32
-    LR = 5e-4         # 降低学习率
-    EPOCHS = 10        # 增加 Epoch，因为有 Early Stopping 保护
+    EMBED_DIM = 64
+    LR = 5e-5         # 降低学习率
+    EPOCHS = 3        # 增加 Epoch，因为有 Early Stopping 保护
     L1_LAMBDA = 1e-5
     WEIGHT_A = 1.0
     WEIGHT_B = 0.5
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     print(f"Training on device: {device}")
 
     # 1. 准备数据
-    train_loader, val_loader = create_dataloaders(TRAIN_PATH, FEATURE_COLS, val_ratio=0.2)
+    train_loader, val_loader, _, _ = create_dataloaders(TRAIN_PATH, FEATURE_COLS, val_ratio=0.2)
 
     # 2. 初始化模型
     # model = QuantGRU(INPUT_DIM, HIDDEN_DIM, NUM_LAYERS).to(device)
@@ -185,17 +185,20 @@ if __name__ == '__main__':
         
         print(f"Epoch {epoch+1} Result: Train Loss = {avg_train_loss:.6f}, Val Loss = {avg_val_loss:.6f}")
         
-        # === Save Best Model ===
-        if avg_val_loss < 0.99 * best_val_loss:
-            best_val_loss = avg_val_loss
-            print(f"  [New Best] Val Loss improved. Saving model to {PARAME_SAVE_PATH}")
-            torch.save(model.state_dict(), PARAME_SAVE_PATH)
-        else:
-            print(f"  Val Loss did not improve.")
-            break
+        # # === Save Best Model ===
+        # if avg_val_loss < 0.99 * best_val_loss:
+        #     best_val_loss = avg_val_loss
+        #     print(f"  [New Best] Val Loss improved. Saving model to {PARAME_SAVE_PATH}")
+        #     torch.save(model.state_dict(), PARAME_SAVE_PATH)
+        # else:
+        #     print(f"  Val Loss did not improve.")
+        #     break
+
+        print(f"  Saving model to {PARAME_SAVE_PATH}")
+        torch.save(model.state_dict(), PARAME_SAVE_PATH)
 
     # model = QuantGRU(INPUT_DIM, HIDDEN_DIM, NUM_LAYERS).to(device)
     # 2. 加载参数字典
     model.load_state_dict(torch.load(PARAME_SAVE_PATH, map_location=device))
     model.eval()
-    generate_submission(model, TEST_PATH, FEATURE_COLS)
+    generate_submission_with_scale(model, TEST_PATH, FEATURE_COLS)
